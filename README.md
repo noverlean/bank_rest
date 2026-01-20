@@ -1,5 +1,7 @@
 ###🏦 Bank Card Management
+
 ##🚀 Быстрый запуск
+
 bash
 # 1. Клонировать репозиторий
 git clone https://github.com/yourusername/bank-card-management.git
