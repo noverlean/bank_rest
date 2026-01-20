@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - include:
+      file: db/migration/V1_init_schema.sql
+  - include:
+      file: db/migration/V2_insert_admin_user.sql
+  - include:
+      file: db/migration/V3_add_constraints.sql
+  - include:
+      file: db/changelog/changeset/001-add-requested-block-for-card.xml

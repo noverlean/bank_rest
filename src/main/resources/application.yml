@@ -1,8 +1,100 @@
-#
-# application.yml — главный конфигурационный файл Spring Boot.
+spring:
+  application:
+    name: bank-card-management
 
-Что нужно сделать:
-  - Указать настройки подключения к базе данных.
-  - Указать порт приложения.
-  - Настроить параметры безопасности и JWT.
-  - Включить Swagger UI.
+  profiles:
+    active: dev
+
+  datasource:
+    url: jdbc:postgresql://host.docker.internal:5432/bank_card_db
+    username: bank_user
+    password: bank_password
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+
+  web:
+    resources:
+      static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:./docs/
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        jdbc:
+          batch_size: 20
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+  jackson:
+    default-property-inclusion: NON_NULL
+    serialization:
+      write-dates-as-timestamps: false
+    date-format: yyyy-MM-dd
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+server:
+  port: 8080
+  servlet:
+    context-path: /
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: never
+
+jwt:
+  secret: ${JWT_SECRET:dGVzdC1qd3Qtc2VjcmV0LWtleS1taW5pbXVtLTI1Ni1iaXRzLWNoYW5nZS1pbi1wcm9kdWN0aW9u}
+  expiration: 86400000  # 24 часа в миллисекундах
+
+encryption:
+  secret: ${ENCRYPTION_SECRET:dGVzdC1lbmNyeXB0aW9uLXNlY3JldC1rZXk=}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    url: /v3/api-docs
+    operations-sorter: method
+    tags-sorter: alpha
+    display-request-duration: true
+    try-it-out-enabled: true
+    filter: true
+  cache:
+    disabled: true
+
+  # Настройки для русского языка
+  default-produces-media-type: application/json
+  default-consumes-media-type: application/json
+
+  packages-to-scan: com.example.bankcards.controller
+  paths-to-match: /api/**
