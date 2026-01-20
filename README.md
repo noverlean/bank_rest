@@ -6,7 +6,7 @@ git clone https://github.com/yourusername/bank-card-management.git
 cd bank-card-management
 
 # 2. Собрать проект (Maven)
-mvn clean package
+mvn clean package -DskipTests
 
 # 3. Запустить через Docker Compose
 docker-compose up -d
